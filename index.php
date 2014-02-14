@@ -1,7 +1,6 @@
 <?php
-	//prompt for ldap
-	require_once('../init.php');
-	$ldap = get_ldap_connection();
+	
+	//add your security here, we use OpenLDAP at Mozilla
 	session_start();
 	if ( !isset($_SESSION['key']) ) {			
 			$_SESSION['key'] = bin2hex(openssl_random_pseudo_bytes(128));
