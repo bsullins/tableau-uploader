@@ -3,6 +3,7 @@
 # ben sullins (2014-02-13) Changed to accept a specific filename
 # ben sullins (2014-02-13) Now uses rU to open csv files
 # ben sullins (2014-02-14) Protected against when only some columns are missing (line 182) 
+# ben sullins (2014-02-14) it' snow assumed the file has headers and I added protection against invalid int conversion
 
 import csv, os, time, subprocess
 from datetime import datetime
@@ -125,7 +126,7 @@ for csvfilename in os.listdir("."):
                 filebuffer = filebuffer + toplines[i]
             hasheader = csv.Sniffer().has_header(filebuffer) # csvfile.read()  /  filebuffer
         except:
-            hasheader = False
+            hasheader = True #just always assume there are headers
 
 
         # ok lets go
@@ -209,6 +210,7 @@ for csvfilename in os.listdir("."):
         rowsinserted = 1
 
         # if we have a header, we don't want to try and process it
+        #print hasheader
         if hasheader == True:
             csvreader.next()
         print '[',
@@ -235,9 +237,9 @@ for csvfilename in os.listdir("."):
                         newrow.setCharString(columnposition, str(row[fieldname]))
                     else:
                         newrow.setNull(columnposition) # ok, put that None here
-
-                if fieldtype == 'int':
-                    if row[fieldname] != None:
+                if fieldtype == 'int':                    
+                    if row[fieldname].isdigit():
+                        #print 'row= "' + row[fieldname] + '"'
                         newrow.setInteger(columnposition, datatyper(row[fieldname]))
                     else:
                         newrow.setNull(columnposition)
